@@ -14,12 +14,13 @@ class RemoteComfyUICaller:
         return {
             "required": {
                 "remote_base_url": ("STRING", {"default": "http://127.0.0.1:8087"}),
-                "image1": ("IMAGE",),
-                "image2": ("IMAGE",),
+                
                 "workflow_json": ("STRING", {"multiline": True, "dynamicPrompts": False}),
-                "timeout_seconds": ("INT", {"default": 60, "min": 10, "max": 300}),
+                "timeout_seconds": ("INT", {"default": 60, "min": 10, "max": 36000}),
             },
             "optional": {
+                "image1": ("IMAGE",),
+                "image2": ("IMAGE",),
                 "replace1_key": ("STRING", {"default": "{{placeholder1}}", "multiline": False}),
                 "replace1_value": ("STRING", {"default": "", "multiline": False}),
                 "replace2_key": ("STRING", {"default": "{{placeholder2}}", "multiline": False}),
@@ -246,7 +247,7 @@ class RemoteComfyUICaller:
             print(f"Warning: Failed to convert video to frames: {e}")
             return torch.zeros((1, 512, 512, 3), dtype=torch.float32)
 
-    def call_remote_comfyui(self, remote_base_url, image1, image2, workflow_json, timeout_seconds, 
+    def call_remote_comfyui(self, remote_base_url, image1=None, image2=None, workflow_json="", timeout_seconds=30,
                            replace1_key="", replace1_value="", replace2_key="", replace2_value="",
                            replace3_key="", replace3_value="", replace4_key="", replace4_value="",
                            replace5_key="", replace5_value=""):
@@ -254,21 +255,20 @@ class RemoteComfyUICaller:
         prompt_url = f"{base_url}/prompt"
 
         # Step 1: 上传两张图片到远程服务器
-        uploaded_image1 = self.upload_image(base_url, image1, "input_image1.png")
-        uploaded_image2 = self.upload_image(base_url, image2, "input_image2.png")
+        if image1 is not None:
+            uploaded_image1 = self.upload_image(base_url, image1, "input_image1.png")
+        else:
+            uploaded_image1 = ""
 
-        # Step 2: 解析用户输入的原始工作流 JSON
-        try:
-            inner_prompt = json.loads(workflow_json)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid workflow JSON: {e}")
+        if image2 is not None:
+            uploaded_image2 = self.upload_image(base_url, image2, "input_image2.png")
+        else:
+            uploaded_image2 = ""  # 若未提供 image2，则用空字符串替换占位符
 
-        # Step 3: 自动替换workflow中的图片引用和自定义替换
-        workflow_str = json.dumps(inner_prompt)
         
         # 替换图片引用
-        workflow_str = workflow_str.replace("{{image1}}", uploaded_image1)
-        workflow_str = workflow_str.replace("{{image2}}", uploaded_image2)
+        workflow_json = workflow_json.replace("{{image1}}", uploaded_image1)
+        workflow_json = workflow_json.replace("{{image2}}", uploaded_image2)
         
         # 执行5个自定义字符串替换
         replacements = [
@@ -281,10 +281,16 @@ class RemoteComfyUICaller:
         
         for key, value in replacements:
             if key and key.strip():  # 只有当key不为空时才进行替换
-                workflow_str = workflow_str.replace(key, value)
+                workflow_json = workflow_json.replace(key, value)
                 print(f"Replaced '{key}' with '{value}'")
-        
-        inner_prompt = json.loads(workflow_str)
+
+        # Step 2: 解析用户输入的原始工作流 JSON
+        try:
+            inner_prompt = json.loads(workflow_json)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid workflow JSON: {e}")
+
+       
 
         # Step 4: 自动包裹成 ComfyUI API 要求的格式
         payload = {
