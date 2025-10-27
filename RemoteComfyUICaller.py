@@ -315,7 +315,7 @@ class RemoteComfyUICaller:
         history_url = f"{base_url}/history/{prompt_id}"
         start_time = time.time()
         while time.time() - start_time < timeout_seconds:
-            time.sleep(3)
+            time.sleep(1)
             try:
                 hist_resp = requests.get(history_url, timeout=5)
                 print(history_url)
