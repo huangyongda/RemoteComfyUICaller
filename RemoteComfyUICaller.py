@@ -34,8 +34,8 @@ class RemoteComfyUICaller:
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "AUDIO", "STRING")
-    RETURN_NAMES = ("image1", "image2", "video_frames", "audio", "prompt_id")  # 更明确的命名
+    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "AUDIO", "STRING", "STRING")
+    RETURN_NAMES = ("image1", "image2", "video_frames", "audio", "prompt_id","test_str")  # 更明确的命名
     FUNCTION = "call_remote_comfyui"
     CATEGORY = "remote"
 
@@ -315,7 +315,7 @@ class RemoteComfyUICaller:
         history_url = f"{base_url}/history/{prompt_id}"
         start_time = time.time()
         while time.time() - start_time < timeout_seconds:
-            time.sleep(1)
+            time.sleep(3)
             try:
                 hist_resp = requests.get(history_url, timeout=5)
                 print(history_url)
@@ -495,4 +495,4 @@ class RemoteComfyUICaller:
                 "sample_rate": 44100
             }
 
-        return (image_tensors[0], image_tensors[1], video_tensor, audio_output, prompt_id)
+        return (image_tensors[0], image_tensors[1], video_tensor, audio_output, prompt_id, "Remote call successful")
