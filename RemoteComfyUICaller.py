@@ -270,6 +270,16 @@ class RemoteComfyUICaller:
         workflow_json = workflow_json.replace("{{image1}}", uploaded_image1)
         workflow_json = workflow_json.replace("{{image2}}", uploaded_image2)
         
+        
+        #如果replace1_value 有换行符，则需要转义
+        replace1_value = replace1_value.replace("\n", "\\n")
+        replace2_value = replace2_value.replace("\n", "\\n")
+        replace3_value = replace3_value.replace("\n", "\\n")
+        replace4_value = replace4_value.replace("\n", "\\n")
+        replace5_value = replace5_value.replace("\n", "\\n")
+        
+
+
         # 执行5个自定义字符串替换
         replacements = [
             (replace1_key, replace1_value),
