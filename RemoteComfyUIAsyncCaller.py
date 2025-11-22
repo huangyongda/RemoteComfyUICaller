@@ -33,8 +33,8 @@ class RemoteComfyUIAsyncCaller:
             }
         }
 
-    RETURN_TYPES = ("STRING", "STRING")
-    RETURN_NAMES = ("prompt_id", "remote_base_url")
+    RETURN_TYPES = ("STRING", "STRING","STRING")
+    RETURN_NAMES = ("prompt_id", "remote_base_url","seed")
     FUNCTION = "submit_remote_prompt"
     CATEGORY = "remote"
 
@@ -141,4 +141,4 @@ class RemoteComfyUIAsyncCaller:
             raise RuntimeError("No prompt_id returned from remote server")
 
         # Return immediately: caller can use RemoteComfyUIWait with prompt_id + remote_base_url
-        return (prompt_id, base_url)
+        return (prompt_id, base_url, str(int(time.time())))  # Using current timestamp as a simple seed

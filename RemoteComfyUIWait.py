@@ -19,7 +19,9 @@ class RemoteComfyUIWait:
                 "remote_base_url": ("STRING", {"default": "http://127.0.0.1:8087"}),
                 "prompt_id": ("STRING", {"multiline": False}),
                 "timeout_seconds": ("INT", {"default": 60, "min": 1, "max": 36000}),
+                "seed": ("STRING", {"default": "0"}),
             }
+
         }
 
     RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "AUDIO", "STRING", "STRING")
@@ -31,7 +33,7 @@ class RemoteComfyUIWait:
         # helper instance to reuse existing video/audio helpers
         self.helper = RemoteComfyUICaller()
 
-    def wait_for_remote_prompt(self, remote_base_url, prompt_id="", timeout_seconds=60):
+    def wait_for_remote_prompt(self, remote_base_url, prompt_id="", timeout_seconds=60, seed="0"):
         base_url = remote_base_url.rstrip('/')
         history_url = f"{base_url}/history/{prompt_id}"
 
