@@ -6,6 +6,7 @@ from .ShowString import ShowString, ShowStringMultiline, StringFormatter
 from .JsonExtractorNode import JsonExtractorNode
 from .RemoteComfyUIAsyncCaller import RemoteComfyUIAsyncCaller
 from .RemoteComfyUIWait import RemoteComfyUIWait
+from .RandomCacheBuster import RandomCacheBuster
 
 
 # 必须定义这个字典！键是节点在 UI 中显示的名称，值是类
@@ -14,6 +15,7 @@ NODE_CLASS_MAPPINGS = {
     "RemoteComfyUICaller": RemoteComfyUICaller,
     "RemoteComfyUIAsyncCaller": RemoteComfyUIAsyncCaller,
     "RemoteComfyUIWait": RemoteComfyUIWait,
+    "RandomCacheBuster": RandomCacheBuster,
     "VideoMergeNode": VideoMergeNode,
     "LLMApiNode": LLMApiNode,
     "ShowString": ShowString,
@@ -26,6 +28,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
      "RemoteComfyUICaller": "Remote ComfyUI Caller ",
      "RemoteComfyUIAsyncCaller": "远程 ComfyUI 异步调用器",
      "RemoteComfyUIWait": "远程 ComfyUI 等待器",
+     "RandomCacheBuster": "随机缓存破坏器",
      "VideoMergeNode": "视频合并节点",
     "LLMApiNode": "LLM API调用",
     "ShowString": "显示字符串",

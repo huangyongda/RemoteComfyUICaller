@@ -14,7 +14,6 @@ class RemoteComfyUICaller:
         return {
             "required": {
                 "remote_base_url": ("STRING", {"default": "http://127.0.0.1:8087"}),
-                
                 "workflow_json": ("STRING", {"multiline": True, "dynamicPrompts": False}),
                 "timeout_seconds": ("INT", {"default": 60, "min": 10, "max": 36000}),
             },
@@ -277,6 +276,19 @@ class RemoteComfyUICaller:
         replace3_value = replace3_value.replace("\n", "\\n")
         replace4_value = replace4_value.replace("\n", "\\n")
         replace5_value = replace5_value.replace("\n", "\\n")
+        # " 也要转义
+        replace1_value = replace1_value.replace('"', '\\"')
+        replace2_value = replace2_value.replace('"', '\\"')
+        replace3_value = replace3_value.replace('"', '\\"')
+        replace4_value = replace4_value.replace('"', '\\"')
+        replace5_value = replace5_value.replace('"', '\\"')
+
+        #如果 replace1_value 的值等于seed:random，则生成一个随机数替换
+        replace1_value = replace1_value.replace("seed:random", str(np.random.randint(0, 1000000)))
+        replace2_value = replace2_value.replace("seed:random", str(np.random.randint(0, 1000000)))
+        replace3_value = replace3_value.replace("seed:random", str(np.random.randint(0, 1000000)))
+        replace4_value = replace4_value.replace("seed:random", str(np.random.randint(0, 1000000)))
+        replace5_value = replace5_value.replace("seed:random", str(np.random.randint(0, 1000000)))
         
 
 
