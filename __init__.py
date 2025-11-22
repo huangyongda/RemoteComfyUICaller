@@ -4,13 +4,17 @@ from .video_merge_node import VideoMergeNode  # 假设你有这个类
 from .LLMApiNode import LLMApiNode
 from .ShowString import ShowString, ShowStringMultiline, StringFormatter
 from .JsonExtractorNode import JsonExtractorNode
+from .RemoteComfyUIAsyncCaller import RemoteComfyUIAsyncCaller
+from .RemoteComfyUIWait import RemoteComfyUIWait
 
 
 # 必须定义这个字典！键是节点在 UI 中显示的名称，值是类
 # Register the node
 NODE_CLASS_MAPPINGS = {
     "RemoteComfyUICaller": RemoteComfyUICaller,
-     "VideoMergeNode": VideoMergeNode,
+    "RemoteComfyUIAsyncCaller": RemoteComfyUIAsyncCaller,
+    "RemoteComfyUIWait": RemoteComfyUIWait,
+    "VideoMergeNode": VideoMergeNode,
     "LLMApiNode": LLMApiNode,
     "ShowString": ShowString,
     "ShowStringMultiline": ShowStringMultiline,
@@ -20,6 +24,8 @@ NODE_CLASS_MAPPINGS = {
 
 NODE_DISPLAY_NAME_MAPPINGS = {
      "RemoteComfyUICaller": "Remote ComfyUI Caller ",
+     "RemoteComfyUIAsyncCaller": "远程 ComfyUI 异步调用器",
+     "RemoteComfyUIWait": "远程 ComfyUI 等待器",
      "VideoMergeNode": "视频合并节点",
     "LLMApiNode": "LLM API调用",
     "ShowString": "显示字符串",

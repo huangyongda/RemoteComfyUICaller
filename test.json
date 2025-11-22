@@ -1,0 +1,9 @@
+{
+  "3": {
+    "inputs": {
+      "text": "Hello, ComfyUI!",
+      "title": "Custom Title"
+    },
+    "class_type": "ShowString"
+  }
+}
