@@ -250,6 +250,7 @@ class RemoteComfyUICaller:
                            replace1_key="", replace1_value="", replace2_key="", replace2_value="",
                            replace3_key="", replace3_value="", replace4_key="", replace4_value="",
                            replace5_key="", replace5_value=""):
+        print("call_remote_comfyui run >>>>>>>")
         base_url = remote_base_url.rstrip('/')
         prompt_url = f"{base_url}/prompt"
 
