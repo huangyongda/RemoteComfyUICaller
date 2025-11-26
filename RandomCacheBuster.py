@@ -17,6 +17,7 @@ class RandomCacheBuster:
                 "refresh": ("FLOAT", {"default": 0.0}),
                 # 新增：自动在每次运行时包含时间戳以强制刷新缓存
                 "auto": ("BOOLEAN", {"default": False}),
+                "seed": ("INT", {"default": 0}),
             }
         }
 
@@ -25,7 +26,7 @@ class RandomCacheBuster:
     FUNCTION = "generate"
     CATEGORY = "utils"
 
-    def generate(self, length: int = 12, prefix: Optional[str] = "", use_timestamp: bool = False, refresh: float = 0.0, auto: bool = False):
+    def generate(self, length: int = 12, prefix: Optional[str] = "", use_timestamp: bool = False, refresh: float = 0.0, auto: bool = False, seed: int = 0):
         # 生成高熵随机字符串并按需要截断
         rand = secrets.token_urlsafe((length * 3) // 4 + 2)  # 生成略长一些再截断，保证字符集丰富
         rand = rand.replace("-", "").replace("_", "")  # 可选：移除不想要的符号
