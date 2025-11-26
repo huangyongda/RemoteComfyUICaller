@@ -78,3 +78,12 @@ class LoadImgDir:
         first_image = images[0] if images else None
         send_image = images[1] if len(images) > 1 else None
         return (first_image, send_image, images, first_path)
+    
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "LoadImgDir": LoadImgDir,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "LoadImgDir": "加载图片文件夹",
+}

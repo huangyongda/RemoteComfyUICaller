@@ -255,3 +255,11 @@ class LLMApiNode:
         
         return (result["response"], result["full_response"], result["token_count"])
 
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "LLMApiNode": LLMApiNode,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "LLMApiNode": "LLM API 节点",
+}

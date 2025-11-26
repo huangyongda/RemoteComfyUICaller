@@ -152,3 +152,12 @@ class RemoteComfyUIWait:
             }
 
         return (image_tensors[0], image_tensors[1], video_tensor, audio_output, prompt_id, "Remote wait successful")
+
+# Register the node
+NODE_CLASS_MAPPINGS = {
+    "RemoteComfyUIWait": RemoteComfyUIWait,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "RemoteComfyUIWait": "远程 ComfyUI 等待器",
+}

@@ -189,3 +189,11 @@ class AudioMerger:
         }
         
         return (result_audio,)
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "AudioMerger": AudioMerger,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "AudioMerger": "音频合并器",
+}

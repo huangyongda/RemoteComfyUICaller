@@ -1,43 +1,37 @@
 # __init__.py
-from .RemoteComfyUICaller import RemoteComfyUICaller 
-from .video_merge_node import VideoMergeNode  # 假设你有这个类
-from .LLMApiNode import LLMApiNode
-from .ShowString import ShowString, ShowStringMultiline, StringFormatter
-from .JsonExtractorNode import JsonExtractorNode
-from .RemoteComfyUIAsyncCaller import RemoteComfyUIAsyncCaller
-from .RemoteComfyUIWait import RemoteComfyUIWait
-from .RandomCacheBuster import RandomCacheBuster
-from .LoadImgDir import LoadImgDir
+import os
+import importlib
+import glob
+from pathlib import Path
 
+# 获取当前目录路径
+NODE_DIR = Path(__file__).parent
 
-# 必须定义这个字典！键是节点在 UI 中显示的名称，值是类
-# Register the node
-NODE_CLASS_MAPPINGS = {
-    "RemoteComfyUICaller": RemoteComfyUICaller,
-    "RemoteComfyUIAsyncCaller": RemoteComfyUIAsyncCaller,
-    "RemoteComfyUIWait": RemoteComfyUIWait,
-    "RandomCacheBuster": RandomCacheBuster,
-    "LoadImgDir": LoadImgDir,
-    "VideoMergeNode": VideoMergeNode,
-    "LLMApiNode": LLMApiNode,
-    "ShowString": ShowString,
-    "ShowStringMultiline": ShowStringMultiline,
-    "StringFormatter": StringFormatter,
-    "JsonExtractorNode": JsonExtractorNode,
-}
+# 初始化合并字典
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
 
-NODE_DISPLAY_NAME_MAPPINGS = {
-     "RemoteComfyUICaller": "Remote ComfyUI Caller ",
-     "RemoteComfyUIAsyncCaller": "远程 ComfyUI 异步调用器",
-     "RemoteComfyUIWait": "远程 ComfyUI 等待器",
-     "RandomCacheBuster": "随机缓存破坏器",
-     "LoadImgDir": "加载图片文件夹",
-     "VideoMergeNode": "视频合并节点",
-    "LLMApiNode": "LLM API调用",
-    "ShowString": "显示字符串",
-    "ShowStringMultiline": "显示多行字符串",
-    "StringFormatter": "字符串格式化器",
-    "JsonExtractorNode": "JSON提取器",
-}
+# 自动加载所有 .py 文件（排除 __init__.py）
+py_files = glob.glob(os.path.join(NODE_DIR, "[!_]*.py"))  # 跳过 _ 开头和 __init__
 
-__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
+for py_file in py_files:
+    module_name = os.path.splitext(os.path.basename(py_file))[0]
+    full_module_name = f"{__name__}.{module_name}"
+
+    try:
+        # 动态导入模块
+        module = importlib.import_module(full_module_name)
+
+        # 尝试从模块中获取 NODE_CLASS_MAPPINGS
+        if hasattr(module, "NODE_CLASS_MAPPINGS"):
+            NODE_CLASS_MAPPINGS.update(module.NODE_CLASS_MAPPINGS)
+        else:
+            print(f"[ComfyUI-MyNodes] 警告: {module_name} 未定义 NODE_CLASS_MAPPINGS")
+
+        # 尝试合并 NODE_DISPLAY_NAME_MAPPINGS（可选）
+        if hasattr(module, "NODE_DISPLAY_NAME_MAPPINGS"):
+            NODE_DISPLAY_NAME_MAPPINGS.update(module.NODE_DISPLAY_NAME_MAPPINGS)
+
+    except Exception as e:
+        print(f"[ComfyUI-MyNodes] 错误: 无法加载 {module_name}: {e}")
+        # 可选：raise e 以中断加载（用于调试）

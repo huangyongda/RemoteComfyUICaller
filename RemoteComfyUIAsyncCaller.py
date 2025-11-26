@@ -155,3 +155,12 @@ class RemoteComfyUIAsyncCaller:
 
         # Return immediately: caller can use RemoteComfyUIWait with prompt_id + remote_base_url
         return (prompt_id, base_url, str(int(time.time())))  # Using current timestamp as a simple seed
+    
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "RemoteComfyUIAsyncCaller": RemoteComfyUIAsyncCaller,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "RemoteComfyUIAsyncCaller": "远程 ComfyUI 异步调用器",
+}

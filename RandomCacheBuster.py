@@ -46,3 +46,12 @@ class RandomCacheBuster:
 
         result = "-".join(parts) if prefix or use_timestamp or auto or (refresh is not None and refresh != 0.0) else rand
         return (result,)
+
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "RandomCacheBuster": RandomCacheBuster,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "RandomCacheBuster": "随机缓存破坏器",
+}

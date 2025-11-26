@@ -94,3 +94,12 @@ class JsonExtractorNode:
                 parts.append(token)
         
         return parts
+
+    # Register the node
+NODE_CLASS_MAPPINGS = {
+    "JsonExtractorNode": JsonExtractorNode,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "JsonExtractorNode": "JSON提取节点",
+}

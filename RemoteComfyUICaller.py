@@ -519,3 +519,12 @@ class RemoteComfyUICaller:
             }
 
         return (image_tensors[0], image_tensors[1], video_tensor, audio_output, prompt_id, "Remote call successful")
+
+# Register the node
+NODE_CLASS_MAPPINGS = {
+    "RemoteComfyUICaller": RemoteComfyUICaller,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "RemoteComfyUICaller": "远程 ComfyUI 调用器",
+}
