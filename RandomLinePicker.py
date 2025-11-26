@@ -7,6 +7,7 @@ class RandomLinePicker:
     def INPUT_TYPES(cls):
         return {
             "optional": {
+                "seed": ("INT", {"default": 0}),
                 "lines_string": ("STRING", {"default": "", "multiline": True}),
             }
         }
@@ -17,7 +18,7 @@ class RandomLinePicker:
     CATEGORY = "utils"
     OUTPUT_NODE = True
 
-    def pick(self, lines_string):
+    def pick(self, lines_string,seed:int=0):
         """
         从多行字符串中随机选取一行。
         """
