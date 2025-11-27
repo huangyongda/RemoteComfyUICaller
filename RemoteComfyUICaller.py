@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 import time
+import uuid
 
 print("✅ Loaded RemoteComfyUICaller")
 
@@ -40,6 +41,15 @@ class RemoteComfyUICaller:
 
     def upload_image(self, base_url, image_tensor, image_name):
         """上传图片到远程ComfyUI"""
+        # 为图片名添加随机hash和时间戳，避免同名覆盖
+        ts = int(time.time() * 1000)
+        rand_hash = uuid.uuid4().hex[:8]
+        if '.' in image_name:
+            name, ext = image_name.rsplit('.', 1)
+            unique_image_name = f"{name}_{rand_hash}_{ts}.{ext}"
+        else:
+            unique_image_name = f"{image_name}_{rand_hash}_{ts}"
+
         # 转换tensor到PIL图片
         image_np = image_tensor.squeeze().cpu().numpy()  # [H, W, C]
         if image_np.max() <= 1.0:
@@ -55,16 +65,16 @@ class RemoteComfyUICaller:
         # 上传文件
         upload_url = f"{base_url}/upload/image"
         files = {
-            'image': (image_name, img_buffer, 'image/png'),
+            'image': (unique_image_name, img_buffer, 'image/png'),
             'overwrite': (None, 'true')
         }
         
         try:
             resp = requests.post(upload_url, files=files, timeout=30)
             resp.raise_for_status()
-            return resp.json().get('name', image_name)
+            return resp.json().get('name', unique_image_name)
         except Exception as e:
-            raise RuntimeError(f"Failed to upload {image_name}: {e}")
+            raise RuntimeError(f"Failed to upload {unique_image_name}: {e}")
 
     def extract_audio_from_video(self, video_content):
         """从视频中提取音频"""
