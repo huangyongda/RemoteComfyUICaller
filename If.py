@@ -1,47 +1,113 @@
-class IFAnyType:
-    """
-    IF node with automatic type inference.
-    It returns the SAME type as the connected true_value or false_value.
-    """
+# custom_nodes/comfyui_if_node/__init__.py
 
+class IfString:
     @classmethod
-    def INPUT_TYPES(s):
+    def INPUT_TYPES(cls):
         return {
             "required": {
-                "condition": ("FLOAT", {"default": 1.0}),
-                "true_value": ("*",),
-                "false_value": ("*",),
+                "condition": ("BOOLEAN", {"default": True}),
+                "true_value": ("STRING", {"default": ""}),
+                "false_value": ("STRING", {"default": ""}),
             }
         }
 
-    # This enables dynamic type propagation
-    RETURN_TYPES = ("*",)
-    RETURN_NAMES = ("output",)
-    FUNCTION = "run"
-    CATEGORY = "Logic/Advanced"
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "execute"
+    CATEGORY = "logic"
 
-    # The magic: tell ComfyUI this output matches the input type
+    def execute(self, condition, true_value, false_value):
+        return (true_value if condition else false_value,)
+
+
+class IfInt:
     @classmethod
-    def VALIDATE_INPUTS(s, condition, true_value, false_value):
-        # Determine type by inspecting connected input
-        # true_value or false_value whichever is connected
-        if true_value is not None:
-            return (true_value,)
-        if false_value is not None:
-            return (false_value,)
-        return None
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "condition": ("BOOLEAN", {"default": True}),
+                "true_value": ("INT", {"default": 0}),
+                "false_value": ("INT", {"default": 0}),
+            }
+        }
 
-    def run(self, condition, true_value, false_value):
-        if float(condition) > 0:
-            return (true_value,)
-        else:
-            return (false_value,)
+    RETURN_TYPES = ("INT",)
+    FUNCTION = "execute"
+    CATEGORY = "logic"
+
+    def execute(self, condition, true_value, false_value):
+        return (true_value if condition else false_value,)
 
 
+class IfFloat:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "condition": ("BOOLEAN", {"default": True}),
+                "true_value": ("FLOAT", {"default": 0.0}),
+                "false_value": ("FLOAT", {"default": 0.0}),
+            }
+        }
+
+    RETURN_TYPES = ("FLOAT",)
+    FUNCTION = "execute"
+    CATEGORY = "logic"
+
+    def execute(self, condition, true_value, false_value):
+        return (true_value if condition else false_value,)
+
+
+class IfImage:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "condition": ("BOOLEAN", {"default": True}),
+                "true_value": ("IMAGE",),
+                "false_value": ("IMAGE",),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGE",)
+    FUNCTION = "execute"
+    CATEGORY = "logic"
+
+    def execute(self, condition, true_value, false_value):
+        return (true_value if condition else false_value,)
+
+
+class IfImages:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "condition": ("BOOLEAN", {"default": True}),
+                "true_value": ("IMAGES",),
+                "false_value": ("IMAGES",),
+            }
+        }
+
+    RETURN_TYPES = ("IMAGES",)
+    FUNCTION = "execute"
+    CATEGORY = "logic"
+
+    def execute(self, condition, true_value, false_value):
+        return (true_value if condition else false_value,)
+
+
+# 注册
 NODE_CLASS_MAPPINGS = {
-    "IFAnyType": IFAnyType
+    "IfString": IfString,
+    "IfInt": IfInt,
+    "IfFloat": IfFloat,
+    "IfImage": IfImage,
+    "IfImages": IfImages,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "IFAnyType": "IF (Auto Type)"
+    "IfString": "If (String)",
+    "IfInt": "If (Int)",
+    "IfFloat": "If (Float)",
+    "IfImage": "If (Image)",
+    "IfImages": "If (Images)",
 }
