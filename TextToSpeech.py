@@ -12,6 +12,7 @@ class TextToSpeech:
                 "api_key": ("STRING", {"default": ""}),
                 "text": ("STRING", {"default": "", "multiline": True}),
                 "voice": (["alloy", "echo", "fable", "onyx", "nova", "shimmer"],),
+                "model": (["tts-1", "tts-1-hd"], {"default": "tts-1"}), # 添加模型选择
                 "base_url": ("STRING", {"default": "https://www.agsvai.com/v1"}),
             }
         }
@@ -22,7 +23,7 @@ class TextToSpeech:
     CATEGORY = "utils"
     OUTPUT_NODE = True
 
-    def text_to_speech(self, api_key, text, voice, base_url):
+    def text_to_speech(self, api_key, text, voice, model, base_url):
         if not api_key or not text:
             print("TextToSpeech: api_key 或 text 不能为空")
             return (None,)
@@ -37,7 +38,7 @@ class TextToSpeech:
                 api_key=api_key
             )
             response = client.audio.speech.create(
-                model="tts-1",
+                model=model,
                 voice=voice,
                 input=text
             )
